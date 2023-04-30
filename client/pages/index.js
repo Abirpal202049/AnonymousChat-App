@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef  } from "react";
 import io from "socket.io-client";
 
-const socket = io.connect("http://localhost:3001"); // we can use this variable to emit or listen to an event
+const socket = io.connect("https://anonymouschatbackend-production.up.railway.app"); // we can use this variable to emit or listen to an event
 
 function formatAMPM(date) {
   var hours = date.getHours();
@@ -18,18 +18,21 @@ function formatAMPM(date) {
 export default function Home() {
   const [message, setMessage] = useState("");
   const [allMessages, setAllMessages] = useState([]);
+  const containerRef = useRef(null);
 
   const sendMessage = (e) => {
-    // Emiting ===> Sending (to Backend) 1
-    socket.emit("send_message", { message, user: "user1", time : formatAMPM(new Date) });
-
-    let data = { message, user: "user1" , time : formatAMPM(new Date)};
-
-    // Pushing the message I send
-    setAllMessages([...allMessages, data]);
-
-    setMessage("");
-    e.preventDefault();
+    if (message !== ""){
+      // Emiting ===> Sending (to Backend) 1
+      socket.emit("send_message", { message, user: "user1", time : formatAMPM(new Date) });
+  
+      let data = { message, user: "user1" , time : formatAMPM(new Date)};
+  
+      // Pushing the message I send
+      setAllMessages([...allMessages, data]);
+  
+      setMessage("");
+      // e.preventDefault();
+    }
   };
 
 
@@ -42,6 +45,8 @@ export default function Home() {
       // Pushing the message I recived
       setAllMessages([...allMessages, data]);
     });
+
+    containerRef.current.scrollTop = containerRef.current.scrollHeight;
   }, [socket, allMessages]);
 
 
@@ -52,12 +57,11 @@ export default function Home() {
       
 
       {/* All messages */}
-      <div className="max-w-7xl p-10 text-white flex flex-col gap-1 message-container text-[14.2px] font-sans overflow-auto shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg mx-4 mt-5 chatbox">
+      <div ref={containerRef} className="max-w-7xl p-10 text-white flex flex-col gap-1 message-container text-[14.2px] font-sans overflow-y-auto shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg mx-4 mt-5 chatbox">
         {allMessages?.map((ele, i) => {
-          let d = allMessages[0].user;
           return (
-            <div
-              className={`relative text-clip break-words w-fit max-w-[400px] px-5 py-1 rounded-b-[7.5px] text-md shadow flex flex-col
+            <p
+              className={` relative text-clip break-words w-fit max-w-[400px] px-5 py-1 rounded-b-[7.5px] text-md shadow flex flex-col
               ${
                 ele.user === "user1"
                   ? `bg-[#166958] self-end  ${
@@ -79,13 +83,13 @@ export default function Home() {
               <div className="text-[9px] w-fit mt-2 self-end">
                 {ele?.time}
               </div>
-            </div>
+            </p>
           );
         })}
       </div>
 
 
-      <form onSubmit={sendMessage} className="h-[45px] flex my-5 mx-auto w-fit gap-5 ">
+      <div className="h-[45px] flex my-5 mx-auto w-fit gap-5 ">
         <input
           type="text"
           placeholder="Enter your message"
@@ -93,18 +97,19 @@ export default function Home() {
           onChange={(event) => {
             setMessage(event.target.value);
           }}
+          onKeyPress={(event) => {
+            event.key === "Enter" && sendMessage()
+          }}
           className=" py-2 px-5 rounded-full border-black focus:outline-none  sm:w-[450px] lg:w-[600px] shadow-black/40 shadow"
         />
 
         <button
-          type="submit"
+          onClick={sendMessage}
           className="bg-[#166958] py-2 px-7 sm:px-10 shadow-black/40 shadow font-semibold text-base transition-all duration-200 hover:shadow-none   text-white leading-4 rounded-full"
         >
           Send 
         </button>
-      </form>
-
-      
+      </div>
     </div>
   );
 }

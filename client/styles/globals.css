@@ -28,7 +28,7 @@ body {
 }
 
 .chatbox {
-  height: calc(80vh );
+  height: calc(80vh);
   /* justify-content: flex-end; */
 }
 .maketriangle {
