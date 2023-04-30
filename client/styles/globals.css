@@ -2,28 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
-.maketriangle{
-    clip-path: polygon(100% 0, 0 0, 0 100%);
+body {
+  background: url("../public/background.png");
+  background-color: antiquewhite;
+}
+*::-webkit-scrollbar {
+  width: 5px;
 }
 
-.make_triangle_block_right::before{
-    content: "";
-    background-color: #166958;
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    top: 0;
-    right: -8px;
-    clip-path: polygon(100% 0, 0 0, 0 100%);
+*::-webkit-scrollbar-track {
+  background: #ffffff00;
 }
 
-.make_triangle_block_left::before{
-    content: "";
-    background-color: #202c33;
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    top: 0;
-    left: -8px;
-    clip-path: polygon(100% 0, 0 0, 100% 100%);
+*::-webkit-scrollbar-thumb {
+  background-color: #0b3c5c1f;
+  border-radius: 10px;
+  border: 2px solid #80ed9900;
+  visibility: hidden;
+}
+
+*:active::-webkit-scrollbar-thumb,
+*:focus::-webkit-scrollbar-thumb,
+*:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+
+.chatbox {
+  height: calc(80vh );
+  /* justify-content: flex-end; */
+}
+.maketriangle {
+  clip-path: polygon(100% 0, 0 0, 0 100%);
+}
+
+.make_triangle_block_right::before {
+  content: "";
+  background-color: #166958;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 0;
+  right: -8px;
+  clip-path: polygon(100% 0, 0 0, 0 100%);
+}
+
+.make_triangle_block_left::before {
+  content: "";
+  background-color: #202c33;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 0;
+  left: -8px;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
 }

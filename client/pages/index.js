@@ -14,8 +14,6 @@ function formatAMPM(date) {
   return strTime;
 }
 
-// console.log(formatAMPM(new Date));
-
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -26,53 +24,40 @@ export default function Home() {
     socket.emit("send_message", { message, user: "user1", time : formatAMPM(new Date) });
 
     let data = { message, user: "user1" , time : formatAMPM(new Date)};
+
+    // Pushing the message I send
     setAllMessages([...allMessages, data]);
 
     setMessage("");
     e.preventDefault();
   };
 
+
+
   useEffect(() => {
     // Listening ===> Reciving (from Backend) 4
     socket.on("recive_message", (data) => {
-      // console.log("Data : ", data);
       data.user = "user2";
+
+      // Pushing the message I recived
       setAllMessages([...allMessages, data]);
     });
   }, [socket, allMessages]);
 
-  // console.log(allMessages);
+
 
   return (
-    <div className="max-w-[1200px] mx-auto">
+    <div className="max-w-[1200px] mx-auto ">
       {/* Message Form */}
-      <form onSubmit={sendMessage} className="h-[45px] flex my-5 mx-auto  w-fit gap-5">
-        <input
-          type="text"
-          placeholder="Enter your message"
-          value={message}
-          onChange={(event) => {
-            setMessage(event.target.value);
-          }}
-          className="border py-2 px-5 rounded-md border-black focus:outline-none w-[600px]"
-        />
-
-        <button
-          type="submit"
-          className="bg-[#166958] py-2 px-10 rounded font-semibold text-base shadow transition-all duration-200 hover:shadow-none hover:bg-green-700  text-white leading-4"
-        >
-          Send Message
-        </button>
-      </form>
+      
 
       {/* All messages */}
-      <div className="max-w-7xl mx-auto p-10 text-white flex flex-col gap-1 message-container text-[14.2px] font-sans">
+      <div className="max-w-7xl p-10 text-white flex flex-col gap-1 message-container text-[14.2px] font-sans overflow-auto shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg mx-4 mt-5 chatbox">
         {allMessages?.map((ele, i) => {
           let d = allMessages[0].user;
-          {/* console.log("User Detail : ", d); */}
           return (
             <div
-              className={`relative text-clip break-words w-fit max-w-[400px] px-5 py-1 rounded-b-[7.5px] text-md   shadow flex flex-col
+              className={`relative text-clip break-words w-fit max-w-[400px] px-5 py-1 rounded-b-[7.5px] text-md shadow flex flex-col
               ${
                 ele.user === "user1"
                   ? `bg-[#166958] self-end  ${
@@ -98,6 +83,26 @@ export default function Home() {
           );
         })}
       </div>
+
+
+      <form onSubmit={sendMessage} className="h-[45px] flex my-5 mx-auto w-fit gap-5 ">
+        <input
+          type="text"
+          placeholder="Enter your message"
+          value={message}
+          onChange={(event) => {
+            setMessage(event.target.value);
+          }}
+          className=" py-2 px-5 rounded-full border-black focus:outline-none  sm:w-[450px] lg:w-[600px] shadow-black/40 shadow"
+        />
+
+        <button
+          type="submit"
+          className="bg-[#166958] py-2 px-7 sm:px-10 shadow-black/40 shadow font-semibold text-base transition-all duration-200 hover:shadow-none   text-white leading-4 rounded-full"
+        >
+          Send 
+        </button>
+      </form>
 
       
     </div>
