@@ -13,7 +13,7 @@ const server = http.createServer(app) // Creating a server
 // This variable `io` help us to work with socket.io
 const io = new Server(server, {
     cors : {
-        origin: "https://aroid.vercel.app",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"]
     }
 })

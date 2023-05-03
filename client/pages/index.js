@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef  } from "react";
 import io from "socket.io-client";
 
-const socket = io.connect("https://anonymouschatbackend-production.up.railway.app"); // we can use this variable to emit or listen to an event
+const socket = io.connect("http://localhost:3001"); // we can use this variable to emit or listen to an event
 
 function formatAMPM(date) {
   var hours = date.getHours();
